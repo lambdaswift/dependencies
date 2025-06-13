@@ -24,6 +24,10 @@ private enum FileManagerKey: DependencyKey {
     static nonisolated(unsafe) let liveValue: FileManager = .default
 }
 
+private enum UserDefaultsKey: DependencyKey {
+    static nonisolated(unsafe) let liveValue: UserDefaults = .standard
+}
+
 public struct RandomNumberGenerator: Sendable {
     private let _nextDouble: @Sendable () -> Double
     private let _nextInt: @Sendable (ClosedRange<Int>) -> Int
@@ -73,5 +77,10 @@ extension DependencyValues {
     public var fileManager: FileManager {
         get { self[FileManagerKey.self] }
         set { self[FileManagerKey.self] = newValue }
+    }
+    
+    public var userDefaults: UserDefaults {
+        get { self[UserDefaultsKey.self] }
+        set { self[UserDefaultsKey.self] = newValue }
     }
 }
