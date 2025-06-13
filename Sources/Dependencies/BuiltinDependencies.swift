@@ -28,6 +28,10 @@ private enum UserDefaultsKey: DependencyKey {
     static nonisolated(unsafe) let liveValue: UserDefaults = .standard
 }
 
+private enum URLSessionKey: DependencyKey {
+    static let liveValue: URLSession = .shared
+}
+
 public struct RandomNumberGenerator: Sendable {
     private let _nextDouble: @Sendable () -> Double
     private let _nextInt: @Sendable (ClosedRange<Int>) -> Int
@@ -82,5 +86,10 @@ extension DependencyValues {
     public var userDefaults: UserDefaults {
         get { self[UserDefaultsKey.self] }
         set { self[UserDefaultsKey.self] = newValue }
+    }
+    
+    public var urlSession: URLSession {
+        get { self[URLSessionKey.self] }
+        set { self[URLSessionKey.self] = newValue }
     }
 }
