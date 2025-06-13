@@ -44,6 +44,10 @@ private enum AnalyticsKey: DependencyKey {
     static let liveValue = Analytics()
 }
 
+private enum FeatureFlagsKey: DependencyKey {
+    static let liveValue = FeatureFlags()
+}
+
 public struct Logger: Sendable {
     public enum Level: String, Sendable {
         case debug
@@ -164,6 +168,53 @@ public struct Analytics: Sendable {
     }
 }
 
+public struct FeatureFlags: Sendable {
+    private let _isEnabled: @Sendable (String) -> Bool
+    private let _value: @Sendable (String) -> Any?
+    private let _allFlags: @Sendable () -> [String: Any]
+    
+    public init(
+        isEnabled: @escaping @Sendable (String) -> Bool = { _ in false },
+        value: @escaping @Sendable (String) -> Any? = { _ in nil },
+        allFlags: @escaping @Sendable () -> [String: Any] = { [:] }
+    ) {
+        self._isEnabled = isEnabled
+        self._value = value
+        self._allFlags = allFlags
+    }
+    
+    public func isEnabled(_ flag: String) -> Bool {
+        _isEnabled(flag)
+    }
+    
+    public func value<T>(for flag: String, default defaultValue: T) -> T {
+        if let value = _value(flag) as? T {
+            return value
+        }
+        return defaultValue
+    }
+    
+    public func string(for flag: String, default defaultValue: String = "") -> String {
+        value(for: flag, default: defaultValue)
+    }
+    
+    public func bool(for flag: String, default defaultValue: Bool = false) -> Bool {
+        value(for: flag, default: defaultValue)
+    }
+    
+    public func int(for flag: String, default defaultValue: Int = 0) -> Int {
+        value(for: flag, default: defaultValue)
+    }
+    
+    public func double(for flag: String, default defaultValue: Double = 0.0) -> Double {
+        value(for: flag, default: defaultValue)
+    }
+    
+    public var allFlags: [String: Any] {
+        _allFlags()
+    }
+}
+
 public struct RandomNumberGenerator: Sendable {
     private let _nextDouble: @Sendable () -> Double
     private let _nextInt: @Sendable (ClosedRange<Int>) -> Int
@@ -238,5 +289,10 @@ extension DependencyValues {
     public var analytics: Analytics {
         get { self[AnalyticsKey.self] }
         set { self[AnalyticsKey.self] = newValue }
+    }
+    
+    public var featureFlags: FeatureFlags {
+        get { self[FeatureFlagsKey.self] }
+        set { self[FeatureFlagsKey.self] = newValue }
     }
 }

@@ -8,10 +8,11 @@
 4. **URLSession** - Network requests with mocking
 5. **NotificationCenter** - Notification-based communication
 11. **Logger** - Structured logging with test capture
+12. **Analytics** - Event tracking with test verification
 
 ## 🚧 In Progress
 
-12. **Analytics** - Event tracking with test verification
+13. **FeatureFlags** - Feature toggles for A/B testing
 
 ## 📋 TODO
 
