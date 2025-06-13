@@ -40,6 +40,10 @@ private enum LoggerKey: DependencyKey {
     static let liveValue = Logger()
 }
 
+private enum AnalyticsKey: DependencyKey {
+    static let liveValue = Analytics()
+}
+
 public struct Logger: Sendable {
     public enum Level: String, Sendable {
         case debug
@@ -115,6 +119,51 @@ public struct Logger: Sendable {
     }
 }
 
+public struct Analytics: Sendable {
+    public struct Event: Equatable, Sendable {
+        public let name: String
+        public let properties: [String: String]
+        public let timestamp: Date
+        
+        public init(name: String, properties: [String: String] = [:], timestamp: Date = Date()) {
+            self.name = name
+            self.properties = properties
+            self.timestamp = timestamp
+        }
+    }
+    
+    private let _track: @Sendable (Event) -> Void
+    private let _identify: @Sendable (String, [String: String]) -> Void
+    private let _reset: @Sendable () -> Void
+    
+    public init(
+        track: @escaping @Sendable (Event) -> Void = { _ in },
+        identify: @escaping @Sendable (String, [String: String]) -> Void = { _, _ in },
+        reset: @escaping @Sendable () -> Void = { }
+    ) {
+        self._track = track
+        self._identify = identify
+        self._reset = reset
+    }
+    
+    public func track(_ eventName: String, properties: [String: String] = [:]) {
+        let event = Event(name: eventName, properties: properties)
+        _track(event)
+    }
+    
+    public func track(_ event: Event) {
+        _track(event)
+    }
+    
+    public func identify(userId: String, traits: [String: String] = [:]) {
+        _identify(userId, traits)
+    }
+    
+    public func reset() {
+        _reset()
+    }
+}
+
 public struct RandomNumberGenerator: Sendable {
     private let _nextDouble: @Sendable () -> Double
     private let _nextInt: @Sendable (ClosedRange<Int>) -> Int
@@ -184,5 +233,10 @@ extension DependencyValues {
     public var logger: Logger {
         get { self[LoggerKey.self] }
         set { self[LoggerKey.self] = newValue }
+    }
+    
+    public var analytics: Analytics {
+        get { self[AnalyticsKey.self] }
+        set { self[AnalyticsKey.self] = newValue }
     }
 }
