@@ -6,14 +6,13 @@
 2. **FileManager** - File system operations with mocking
 3. **UserDefaults** - User preferences with isolated test suites
 4. **URLSession** - Network requests with mocking
+5. **NotificationCenter** - Notification-based communication
 
 ## 🚧 In Progress
 
-5. **NotificationCenter** - Notification-based communication
+11. **Logger** - Structured logging with test capture
 
 ## 📋 TODO
-
-### Networking & Communication
 
 ### Time & Scheduling
 6. **Timer/Clock** - Time-based operations and delays

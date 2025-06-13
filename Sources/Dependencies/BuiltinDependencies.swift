@@ -36,6 +36,85 @@ private enum NotificationCenterKey: DependencyKey {
     static let liveValue: NotificationCenter = .default
 }
 
+private enum LoggerKey: DependencyKey {
+    static let liveValue = Logger()
+}
+
+public struct Logger: Sendable {
+    public enum Level: String, Sendable {
+        case debug
+        case info
+        case warning
+        case error
+        case critical
+    }
+    
+    private let _log: @Sendable (Level, String, String, String, Int) -> Void
+    
+    public init(
+        log: @escaping @Sendable (Level, String, String, String, Int) -> Void = { level, message, file, function, line in
+            print("[\(level.rawValue.uppercased())] \(file.split(separator: "/").last ?? ""):\(line) \(function) - \(message)")
+        }
+    ) {
+        self._log = log
+    }
+    
+    public func log(
+        _ level: Level,
+        _ message: String,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        _log(level, message, file, function, line)
+    }
+    
+    public func debug(
+        _ message: String,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        log(.debug, message, file: file, function: function, line: line)
+    }
+    
+    public func info(
+        _ message: String,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        log(.info, message, file: file, function: function, line: line)
+    }
+    
+    public func warning(
+        _ message: String,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        log(.warning, message, file: file, function: function, line: line)
+    }
+    
+    public func error(
+        _ message: String,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        log(.error, message, file: file, function: function, line: line)
+    }
+    
+    public func critical(
+        _ message: String,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        log(.critical, message, file: file, function: function, line: line)
+    }
+}
+
 public struct RandomNumberGenerator: Sendable {
     private let _nextDouble: @Sendable () -> Double
     private let _nextInt: @Sendable (ClosedRange<Int>) -> Int
@@ -100,5 +179,10 @@ extension DependencyValues {
     public var notificationCenter: NotificationCenter {
         get { self[NotificationCenterKey.self] }
         set { self[NotificationCenterKey.self] = newValue }
+    }
+    
+    public var logger: Logger {
+        get { self[LoggerKey.self] }
+        set { self[LoggerKey.self] = newValue }
     }
 }
