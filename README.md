@@ -19,7 +19,7 @@ Add Dependencies to your `Package.swift` file:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourusername/dependencies", from: "1.0.0")
+    .package(url: "https://github.com/lambdaswift/dependencies", from: "0.0.1")
 ]
 ```
 
