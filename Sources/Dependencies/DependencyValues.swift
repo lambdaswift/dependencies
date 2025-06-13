@@ -1,7 +1,7 @@
 import Foundation
 
-public struct DependencyValues {
-    private var storage: [ObjectIdentifier: Any] = [:]
+public struct DependencyValues: @unchecked Sendable {
+    var storage: [ObjectIdentifier: Any] = [:]
     
     public static let live = LockIsolated(DependencyValues())
     
