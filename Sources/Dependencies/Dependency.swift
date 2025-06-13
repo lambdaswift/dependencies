@@ -10,7 +10,11 @@ public struct Dependency<Value> {
     
     public var wrappedValue: Value {
         get {
-            DependencyContext.shared.current[keyPath: keyPath]
+            if DependencyContext.shared.hasOverrides {
+                return DependencyContext.shared.current[keyPath: keyPath]
+            } else {
+                return DependencyValues.live.withValue { $0[keyPath: keyPath] }
+            }
         }
     }
 }
