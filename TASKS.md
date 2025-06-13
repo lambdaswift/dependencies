@@ -5,16 +5,15 @@
 1. **RandomNumberGenerator** - Random number generation with deterministic testing
 2. **FileManager** - File system operations with mocking
 3. **UserDefaults** - User preferences with isolated test suites
+4. **URLSession** - Network requests with mocking
 
 ## 🚧 In Progress
 
-None
+5. **NotificationCenter** - Notification-based communication
 
 ## 📋 TODO
 
 ### Networking & Communication
-4. **URLSession** - Network requests with mocking
-5. **NotificationCenter** - Notification-based communication
 
 ### Time & Scheduling
 6. **Timer/Clock** - Time-based operations and delays

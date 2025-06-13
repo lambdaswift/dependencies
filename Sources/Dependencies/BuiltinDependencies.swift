@@ -32,6 +32,10 @@ private enum URLSessionKey: DependencyKey {
     static let liveValue: URLSession = .shared
 }
 
+private enum NotificationCenterKey: DependencyKey {
+    static let liveValue: NotificationCenter = .default
+}
+
 public struct RandomNumberGenerator: Sendable {
     private let _nextDouble: @Sendable () -> Double
     private let _nextInt: @Sendable (ClosedRange<Int>) -> Int
@@ -91,5 +95,10 @@ extension DependencyValues {
     public var urlSession: URLSession {
         get { self[URLSessionKey.self] }
         set { self[URLSessionKey.self] = newValue }
+    }
+    
+    public var notificationCenter: NotificationCenter {
+        get { self[NotificationCenterKey.self] }
+        set { self[NotificationCenterKey.self] = newValue }
     }
 }
