@@ -2,6 +2,10 @@
 
 ## ✅ Completed
 
+### Core Features
+- **Async/Await Support** (v0.0.2) - Full support for dependency injection across async boundaries
+
+### Built-in Dependencies
 1. **RandomNumberGenerator** - Random number generation with deterministic testing
 2. **FileManager** - File system operations with mocking
 3. **UserDefaults** - User preferences with isolated test suites
@@ -35,3 +39,4 @@ None
 - All dependencies use `nonisolated(unsafe)` for non-Sendable types
 - Each dependency includes comprehensive tests
 - Tests demonstrate default values, overrides, and scoped behavior
+- v0.0.2 adds full async/await support with TaskLocal storage for proper dependency propagation
