@@ -30,10 +30,10 @@ import Foundation
     }
     
     let fixedDate = Date(timeIntervalSince1970: 1234567890)
-    var overridden = DependencyValues()
-    overridden.date = { fixedDate }
     
-    let result = DependencyContext.shared.withValues(overridden) {
+    let result = withDependencies {
+        $0.date = { fixedDate }
+    } operation: {
         let view = TestView()
         return view.getCurrentDate()
     }
@@ -51,15 +51,14 @@ import Foundation
     }
     
     let fixedDate = Date(timeIntervalSince1970: 1234567890)
-    var overridden = DependencyValues()
-    overridden.date = { fixedDate }
-    
     let view = TestView()
     
     let beforeOverride = view.getCurrentDate()
     #expect(abs(beforeOverride.timeIntervalSince1970 - fixedDate.timeIntervalSince1970) > 1000)
     
-    let duringOverride = DependencyContext.shared.withValues(overridden) {
+    let duringOverride = withDependencies {
+        $0.date = { fixedDate }
+    } operation: {
         view.getCurrentDate()
     }
     #expect(duringOverride == fixedDate)

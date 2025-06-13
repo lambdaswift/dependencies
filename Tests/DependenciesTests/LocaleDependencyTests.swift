@@ -27,10 +27,10 @@ import Foundation
     }
     
     let japaneseLocale = Locale(identifier: "ja_JP")
-    var overridden = DependencyValues()
-    overridden.locale = japaneseLocale
     
-    let result = DependencyContext.shared.withValues(overridden) {
+    let result = withDependencies {
+        $0.locale = japaneseLocale
+    } operation: {
         let view = TestView()
         return view.getLocale()
     }
@@ -48,15 +48,15 @@ import Foundation
     }
     
     let frenchLocale = Locale(identifier: "fr_FR")
-    var overridden = DependencyValues()
-    overridden.locale = frenchLocale
     
     let view = TestView()
     
     let beforeOverride = view.getLocale()
     #expect(beforeOverride.identifier != "fr_FR")
     
-    let duringOverride = DependencyContext.shared.withValues(overridden) {
+    let duringOverride = withDependencies {
+        $0.locale = frenchLocale
+    } operation: {
         view.getLocale()
     }
     #expect(duringOverride.identifier == "fr_FR")
@@ -80,10 +80,10 @@ import Foundation
     }
     
     let germanLocale = Locale(identifier: "de_DE")
-    var overridden = DependencyValues()
-    overridden.locale = germanLocale
     
-    let germanResult = DependencyContext.shared.withValues(overridden) {
+    let germanResult = withDependencies {
+        $0.locale = germanLocale
+    } operation: {
         let view = TestView()
         return view.formatNumber(1234.56)
     }
@@ -91,9 +91,10 @@ import Foundation
     #expect(germanResult == "1.234,56")
     
     let usLocale = Locale(identifier: "en_US")
-    overridden.locale = usLocale
     
-    let usResult = DependencyContext.shared.withValues(overridden) {
+    let usResult = withDependencies {
+        $0.locale = usLocale
+    } operation: {
         let view = TestView()
         return view.formatNumber(1234.56)
     }

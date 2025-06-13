@@ -28,10 +28,10 @@ import Foundation
     }
     
     let fixedUUID = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
-    var overridden = DependencyValues()
-    overridden.uuid = { fixedUUID }
     
-    let result = DependencyContext.shared.withValues(overridden) {
+    let result = withDependencies {
+        $0.uuid = { fixedUUID }
+    } operation: {
         let view = TestView()
         return view.generateID()
     }
@@ -49,15 +49,15 @@ import Foundation
     }
     
     let fixedUUID = UUID(uuidString: "12345678-1234-1234-1234-123456789012")!
-    var overridden = DependencyValues()
-    overridden.uuid = { fixedUUID }
     
     let view = TestView()
     
     let beforeOverride = view.generateID()
     #expect(beforeOverride != fixedUUID)
     
-    let duringOverride = DependencyContext.shared.withValues(overridden) {
+    let duringOverride = withDependencies {
+        $0.uuid = { fixedUUID }
+    } operation: {
         view.generateID()
     }
     #expect(duringOverride == fixedUUID)

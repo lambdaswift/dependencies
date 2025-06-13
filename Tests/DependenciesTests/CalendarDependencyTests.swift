@@ -29,10 +29,9 @@ import Foundation
     var customCalendar = Calendar(identifier: .japanese)
     customCalendar.firstWeekday = 2
     
-    var overridden = DependencyValues()
-    overridden.calendar = customCalendar
-    
-    let result = DependencyContext.shared.withValues(overridden) {
+    let result = withDependencies {
+        $0.calendar = customCalendar
+    } operation: {
         let view = TestView()
         return view.getCalendar()
     }
@@ -51,15 +50,15 @@ import Foundation
     }
     
     let customCalendar = Calendar(identifier: .buddhist)
-    var overridden = DependencyValues()
-    overridden.calendar = customCalendar
     
     let view = TestView()
     
     let beforeOverride = view.getCalendar()
     #expect(beforeOverride.identifier != .buddhist)
     
-    let duringOverride = DependencyContext.shared.withValues(overridden) {
+    let duringOverride = withDependencies {
+        $0.calendar = customCalendar
+    } operation: {
         view.getCalendar()
     }
     #expect(duringOverride.identifier == .buddhist)
@@ -82,11 +81,10 @@ import Foundation
     var gregorianCalendar = Calendar(identifier: .gregorian)
     gregorianCalendar.timeZone = TimeZone(identifier: "UTC")!
     
-    var overridden = DependencyValues()
-    overridden.calendar = gregorianCalendar
-    overridden.date = { fixedDate }
-    
-    let result = DependencyContext.shared.withValues(overridden) {
+    let result = withDependencies {
+        $0.calendar = gregorianCalendar
+        $0.date = { fixedDate }
+    } operation: {
         let view = TestView()
         return view.getStartOfDay()
     }
