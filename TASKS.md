@@ -9,10 +9,11 @@
 5. **NotificationCenter** - Notification-based communication
 11. **Logger** - Structured logging with test capture
 12. **Analytics** - Event tracking with test verification
+13. **FeatureFlags** - Feature toggles for A/B testing
 
 ## 🚧 In Progress
 
-13. **FeatureFlags** - Feature toggles for A/B testing
+None
 
 ## 📋 TODO
 
