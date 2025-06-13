@@ -57,7 +57,7 @@ import Foundation
     let view = TestView()
     
     let beforeOverride = view.getCurrentDate()
-    #expect(beforeOverride != fixedDate)
+    #expect(abs(beforeOverride.timeIntervalSince1970 - fixedDate.timeIntervalSince1970) > 1000)
     
     let duringOverride = DependencyContext.shared.withValues(overridden) {
         view.getCurrentDate()
@@ -65,5 +65,5 @@ import Foundation
     #expect(duringOverride == fixedDate)
     
     let afterOverride = view.getCurrentDate()
-    #expect(afterOverride != fixedDate)
+    #expect(abs(afterOverride.timeIntervalSince1970 - fixedDate.timeIntervalSince1970) > 1000)
 }

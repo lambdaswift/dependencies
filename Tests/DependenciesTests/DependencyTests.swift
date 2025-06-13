@@ -38,7 +38,7 @@ extension DependencyValues {
         }
     }
     
-    var overridden = DependencyValues()
+    var overridden = DependencyValues.live.withValue { $0 }
     overridden.testService = TestService(value: "overridden")
     
     let result = DependencyContext.shared.withValues(overridden) {
